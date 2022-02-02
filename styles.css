@@ -1,0 +1,87 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 15px;
+}
+
+#brainwaves {
+  height: 100%;
+  width: calc(50% - 100px);
+  position: fixed;
+  top: 0px;
+  z-index: 0;
+}
+
+#code {
+  font-family: consolas, inconsolata, 'dejavu sans mono', monospace;
+  color: #ddd;
+  height: 100%;
+  width: calc(50% - 420px);
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  z-index: 0;
+  white-space: pre;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+main {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 1;
+  max-width: 800px;
+  min-height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  padding: 20px;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+h1 {
+  line-height: 150%;
+}
+
+.lab {
+  font-size: 1.5ex;
+  display: block;
+}
+
+h1 .cap {
+  font-size: 5ex;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 2em;
+}
+
+h2 .cap {
+  font-size: 3ex;
+}
+
+.kern {
+  margin-right: -0.1ex;
+}
+
+
+nav {
+  margin: auto;
+  max-width: 760px;
+  text-align: center;
+}
+
+nav a, a:visited {
+  color: #0645ad;
+  text-decoration: none;
+  padding: 0px 20px;
+  color: 
+}
+
+.video {
+  display: block;
+  margin: auto;
+}
