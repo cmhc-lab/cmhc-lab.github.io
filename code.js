@@ -9,7 +9,7 @@ async function writeFile(url) {
   let content = await response.text();
   content = content.replace(/    /g, ' ');
   const code = document.getElementById('code');
-  code.innerHTML = '';
+  code.textContent = '';
   let i = 0;
 
   return new Promise(function(resolve) {
@@ -17,7 +17,7 @@ async function writeFile(url) {
       if(i == content.length) {
         resolve();
       }
-      code.innerHTML += content.charAt(i);
+      code.textContent += content.charAt(i);
       code.scrollTop = code.scrollHeight;
       i++;
       setTimeout(writer, 50);

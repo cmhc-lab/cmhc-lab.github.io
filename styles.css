@@ -15,7 +15,7 @@ body {
   font-family: consolas, inconsolata, 'dejavu sans mono', monospace;
   color: #ddd;
   height: 100%;
-  width: calc(50% - 420px);
+  width: calc(50% - 423px);
   position: fixed;
   top: 0px;
   right: 0px;
@@ -55,8 +55,11 @@ h1 .cap {
 }
 
 h2 {
+  display: block;
+  width: 100%;
   text-align: center;
   margin-top: 2em;
+  margin-bottom: 1em;
 }
 
 h2 .cap {
@@ -67,21 +70,109 @@ h2 .cap {
   margin-right: -0.1ex;
 }
 
+h3 {
+  margin: 0px;
+  font-weight: bold;
+}
+
+h4 {
+  margin: 0px;
+  font-size: 0.9rem;
+  font-style: italic;
+  font-weight: normal;
+}
+
 
 nav {
   margin: auto;
   max-width: 760px;
-  text-align: center;
+  display: flex;
+  column-gap: 10px;
+  justify-content: space-evenly;
 }
 
-nav a, a:visited {
+a, a:visited {
   color: #0645ad;
   text-decoration: none;
-  padding: 0px 20px;
-  color: 
+}
+
+section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 30px;
+}
+
+section p {
+  margin: 0px;
+  width: 100%;
+  line-height: 150%;
 }
 
 .video {
   display: block;
-  margin: auto;
+}
+
+div.member {
+  position: relative;
+  width: 280px;
+  margin-right: 15px;
+  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+div.member p {
+  margin-top: 10px;
+  line-height: 120%;
+}
+
+div.image-cropper {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+
+div.image-cropper img {
+  display: inline;
+  margin: 0 auto;
+  height: 100%;
+  width: auto;
+}
+
+div.links {
+  display: flex;
+  column-gap: 10px;
+}
+
+div.project {
+  position: relative;
+  width: 100%;
+  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+div.project p {
+  margin-top: 10px;
+  line-height: 120%;
+}
+
+div.package {
+  position: relative;
+  width: 350px;
+  margin-right: 15px;
+  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+div.package p {
+  margin-top: 10px;
+  line-height: 120%;
 }

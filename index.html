@@ -13,7 +13,7 @@
   <div id="code"></div>
   <main>
     <h1>
-      <span class="lab">laboratory for</span>
+      <span class="lab">Aalto University's laboratory for</span>
       <span class="cap">C</span>omputational
       <span class="cap">M</span>odeling of
       <span class="cap">H</span>uman
@@ -28,16 +28,110 @@
       <a href="#talks">Talks &amp; Lectures</a>
     </nav>
 
+    <section>
     <h2 id="mission"><span class="cap">M</span>ission</h2>
+    <p>It is our mission to understand the complex cognitive processes of the brain through computational models.</p>
 
-    <h2 id="members"><span class="cap">G</span>roup <span class="cap">M</span>embers</h2>
+    <p>
+      We believe that when it comes to understanding the brain, data alone is not enough.
+      Our work represents the combination of both knowledge encoded through "manual" modeling work and the "fit to data" provided by machine learning, to drive our ability to understand the mechanics behind high level cognitive processes in the brain.
+      Currently, our focus is on creating a model of the visual ventral stream to help decode the various stages of written word processing.
+    </p>
 
-    <h2 id="projects"><span class="cap">R</span>esearch <span class="cap kern">P</span>rojects</h2>
+    <p>
+      Aalto University is famous for its pioneering work in brain imaging methods development.
+      It is one of the birthplaces of MEG and is now performing ground breaking work in optically pumped magnetometer (OPM) sensor technology to drive the possibilities even further.
+      This lab aims to provide a strong computational modeling counterpart to the imaging work.
+    </p>
+    </section>
 
-    <h2 id="software"><span class="cap">S</span>oftware</h2>
+    <section>
+      <h2 id="members"><span class="cap">G</span>roup <span class="cap">M</span>embers</h2>
+      <div class="member">
+        <h3>Marijn van Vliet</h3>
+        <h4>Academy Research Fellow</h4>
+        <div class="links">
+          <a href="https://github.com/wmvanvliet">github</a>
+          <a href="https://scholar.google.fi/citations?user=fqNH86EAAAAJ&hl=en&oi=ao">publications</a>
+          <a href="mailto:marijn.vanvliet@aalto.fi">email</a>
+        </div>
+        <div class="image-cropper">
+            <img src="images/marijn.jpg">
+        </div>
+        <p>
+          Head of the lab.
+          Constructing computational models of visual word recognition.
+        </p>
+      </div>
 
-    <h2 id="talks"><span class="cap kern">T</span>alks &amp; <span class="cap">L</span>ectures</h2>
-    <iframe class="video" width="560" height="315" src="https://www.youtube-nocookie.com/embed/Cqbjz6eHTLc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="member">
+        <h3>Shristi Baral</h3>
+        <h4>PhD Candidate</h4>
+        <div class="links">
+          <a href="https://github.com/shristibaral">github</a>
+          <a href="#">publications</a>
+          <a href="mailto:shristi.baral@aalto.fi">email</a>
+        </div>
+        <p>
+          Adding biological detail to the computational models.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="projects"><span class="cap">R</span>esearch <span class="cap kern">P</span>rojects</h2>
+      <div class="project">
+        <h3><a href="viswordrec-baseline">A large-scale computational model to accurately predict early brain activity in response to written words</a></h3>
+        <h4>Marijn van Vliet, Oona Rinkinen, Takao Shimizu, Barry Devereux, Riitta Salmelin</h4>
+        <p>
+          To better understand the computational steps that the brain performs during reading, we used a convolutional neural network as a computational model of visual word recognition, the first stage of reading.
+          In contrast to traditional models of reading, our model directly operates on the pixel values of an image containing text, and has a large vocabulary of 10k Finnish words.
+          The same stimuli can thus be presented unmodified to both the model and human volunteers in an MEG scanner.
+          In a direct comparison between model and brain activity, we show that the model accurately predicts the amplitude of three evoked MEG response components commonly observed during reading.
+          We conclude that the deep learning techniques that revolutionized models of object recognition can also create models of reading that can be straightforwardly compared to neuroimaging data, which will greatly facilitate testing and refining theories on language processing in the brain.
+        </p>
+        <p><a href="viswordrec-baseline/">Find out more on the project page...</a></p>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="software"><span class="cap">S</span>oftware</h2>
+      <div class="package">
+        <h3>MNE-RSA</h3>
+        <h4>Representational similarity analysis for MNE-Python</h4>
+        <div class="links">
+          <a href="http://users.aalto.fi/~vanvlm1/mne-rsa">website</a>
+          <a href="https://github.com/wmvanvliet/mne-rsa">github</a>
+        </div>
+        <p>
+          A plugin for <a href="https://mne.tools">MNE-Python</a> to perform representational similarity analysis (RSA) on EEG &amp; MEG data in a searchlight fashion.
+          It includes best practise features such as cross-validation and PCA preprocessing. 
+        </p>
+      </div>
+
+      <div class="package">
+        <h3>Pytorch-HMAX</h3>
+        <h4>The HMAX model of vision implemented in PyTorch</h4>
+        <div class="links">
+          <a href="https://github.com/wmvanvliet/pytorch_hmax">github</a>
+        </div>
+        <p>
+          A PyTorch implementation of the HMAX model that closely follows that of the MATLAB implementation of The Laboratory for Computational Cognitive Neuroscience of Georgetown University.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="talks"><span class="cap kern">T</span>alks &amp; <span class="cap">L</span>ectures</h2>
+
+      <iframe class="video" width="375" height="211" src="https://www.youtube-nocookie.com/embed/Cqbjz6eHTLc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+      <iframe class="video" width="375" height="211" src="https://www.youtube-nocookie.com/embed/2y68NMmacG4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+      <iframe class="video" width="375" height="211" src="https://www.youtube-nocookie.com/embed/RWpCWPZqdj8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+      <iframe class="video" width="375" height="211" src="https://www.youtube-nocookie.com/embed/OlxVhkuiGPU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </section>
   </main>
 </body>
 </html
