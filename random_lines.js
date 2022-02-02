@@ -8,16 +8,10 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.strokeStyle = '#ddd';
 //ctx.strokeStyle = 'white';
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  //canvas.height = window.innerHeight;
-  drawTraces();
-}
-
 function drawTraces() {
   traces = [];
   initPositions = [];
-  numTraces = 10;
+  numTraces = canvas.height / 30;
   vspace = canvas.height / (numTraces + 2);
   for (let y=vspace/2; y<=canvas.height-vspace/2; y+=vspace) {
     traces.push(y);
@@ -36,6 +30,10 @@ function drawTraces() {
   }
 
   function update() {
+    if(window.innerWidth < 900) {
+      return;
+    }
+
     const offset = 1;
 
     let x = canvas.width - offset - 1;

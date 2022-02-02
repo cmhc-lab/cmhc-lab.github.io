@@ -14,6 +14,9 @@ async function writeFile(url) {
 
   return new Promise(function(resolve) {
     function writer() {
+      if(window.innerWidth < 900) {
+        return;
+      }
       if(i == content.length) {
         resolve();
       }
