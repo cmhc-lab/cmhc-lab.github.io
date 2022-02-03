@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Marijn van Vliet" />
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <main>
+    <h1>A large-scale computational model to accurately predict early brain activity in response to written words</h1>
+    <p class="authors">
+      Marijn van Vliet<sup>1,*</sup>, Oona Rinkinen<sup>1</sup>, Takao Shimizu<sup>1</sup>, Barry Devereux<sup>3</sup>, and Riitta Salmelin<sup>1,2</sup>
+
+      <sup>1</sup> Department of Neuroscience and Biomedical Engineering, Aalto University, Finland
+      <sup>2</sup> Aalto NeuroImaging, Aalto University, Finland
+      <sup>3</sup> School of Electronics, Electrical Engineering and Computer Science, Queen's University Belfast, United Kingdom
+    </p>
+
+    <nav>
+      <a href="#summary">Summary</a>
+      <a href="reading_models.html">Full Paper</a>
+      <a href="#code">Model</a>
+      <a href="https://github.com/wmvanvliet/viswordrec-baseline">Code</a>
+      <a href="https://osf.io/nu2ep">Data</a>
+    </nav>
+
+    <section>
+      <h2 id="summary">Project Summary</h2>
+
+      <p>
+        To better understand the computational steps that the brain performs during reading, we used a convolutional neural network as a computational model of visual word recognition, the first stage of reading.
+        In contrast to traditional models of reading, our model directly operates on the pixel values of an image containing text, and has a large vocabulary of 10k Finnish words.
+        The same stimuli can thus be presented unmodified to both the model and human volunteers in an MEG scanner.
+        In a direct comparison between model and brain activity, we show that the model accurately predicts the amplitude of three evoked MEG response components commonly observed during reading.
+        We conclude that the deep learning techniques that revolutionized models of object recognition can also create models of reading that can be straightforwardly compared to neuroimaging data, which will greatly facilitate testing and refining theories on language processing in the brain.
+      </p>
+
+      <p>Here is a video presentation of the project. A talk given at the Neuromatch conference in 2021:</p>
+
+      <iframe class="video" width="750" height="422" src="https://www.youtube-nocookie.com/embed/Cqbjz6eHTLc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+      <p>
+        Below is a graphical summary of the main results: comparing model- to brain-activity. The same set of visual stimuli (color coded in the figure) were presented to human volunteers in an MEG experiment, and to a VGG-11 convolutional network. The amount of brain activity to each stimulus was quantified at three locations along the cortex (equivalent current dipole (ECD) modeling, <b>A</b>) and compared to the sum ReLu activity at the layers of the model (<b>B</b>):
+      </p>
+
+      <img src="results.png" width="100%" style="margin-top: 2ex"/>
+    </section>
+  </main>
+</body>
+</html

@@ -176,3 +176,8 @@ div.package p {
   margin-top: 10px;
   line-height: 120%;
 }
+
+p.authors {
+  white-space: pre-line;
+  margin-top: -5ex;
+}
