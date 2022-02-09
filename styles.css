@@ -23,6 +23,7 @@ body {
   white-space: pre;
   overflow-x: hidden;
   overflow-y: hidden;
+  font-size: 10pt;
 }
 
 main {
@@ -83,14 +84,6 @@ h4 {
 }
 
 
-nav {
-  margin: auto;
-  max-width: 760px;
-  display: flex;
-  column-gap: 10px;
-  justify-content: space-evenly;
-}
-
 a, a:visited {
   color: #0645ad;
   text-decoration: none;
@@ -108,6 +101,27 @@ section p {
   width: 100%;
   line-height: 150%;
 }
+
+nav {
+  margin: 100px auto 20px auto;
+  max-width: 760px;
+  display: flex;
+  column-gap: 10px;
+  justify-content: space-evenly;
+}
+
+nav img {
+  height: 50px;
+}
+
+nav a {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  display: block;
+  width: 100px;
+}
+
 
 .video {
   display: block;
@@ -180,4 +194,9 @@ div.package p {
 p.authors {
   white-space: pre-line;
   margin-top: -5ex;
+}
+
+.talk img {
+  width: 350px;
+  border: 1px solid black;
 }
