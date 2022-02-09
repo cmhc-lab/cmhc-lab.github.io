@@ -106,7 +106,9 @@ nav {
   margin: 100px auto 20px auto;
   max-width: 760px;
   display: flex;
+  flex-wrap: wrap;
   column-gap: 10px;
+  row-gap: 10px;
   justify-content: space-evenly;
 }
 
