@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="4.0826mm" height="4.1818mm" version="1.1" viewBox="0 0 4.0826 4.1818" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-175.98 -150.43)">
+  <g transform="matrix(.54869 0 0 .54869 147.91 126.5)" stroke-width="1.8225">
+   <circle cx="53.521" cy="46.009" r=".61834" fill="#2cb9f1"/>
+   <circle cx="52.898" cy="45.352" r=".90372" fill="#0645ad"/>
+   <circle cx="53.5" cy="48.771" r=".61834" fill="#2cb9f1"/>
+   <g fill="#0645ad">
+    <circle cx="52.054" cy="47.386" r=".90372"/>
+    <circle cx="52.868" cy="49.389" r=".90372"/>
+    <circle cx="54.916" cy="50.338" r=".90372"/>
+    <circle cx="54.916" cy="44.524" r=".90372"/>
+   </g>
+   <circle transform="scale(-1,1)" cx="-56.221" cy="46.009" r=".61834" fill="#2cb9f1"/>
+   <circle transform="scale(-1,1)" cx="-56.844" cy="45.352" r=".90372" fill="#0645ad"/>
+   <circle transform="scale(-1,1)" cx="-57.687" cy="47.386" r=".90372" fill="#0645ad"/>
+   <circle transform="scale(-1,1)" cx="-56.241" cy="48.771" r=".61834" fill="#2cb9f1"/>
+   <circle transform="scale(-1,1)" cx="-56.874" cy="49.389" r=".90372" fill="#0645ad"/>
+   <g fill="#2cb9f1">
+    <circle cx="52.944" cy="47.4" r=".61834"/>
+    <circle cx="54.902" cy="49.42" r=".61834"/>
+    <circle cx="54.902" cy="45.442" r=".61834"/>
+    <circle transform="scale(-1,1)" cx="-56.798" cy="47.4" r=".61834"/>
+   </g>
+  </g>
+ </g>
+</svg>

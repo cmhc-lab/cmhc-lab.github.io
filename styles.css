@@ -103,7 +103,7 @@ section p {
 }
 
 nav {
-  margin: 100px auto 20px auto;
+  margin: 80px auto 20px auto;
   max-width: 760px;
   display: flex;
   flex-wrap: wrap;
@@ -114,6 +114,7 @@ nav {
 
 nav img {
   height: 50px;
+  padding: 0px 20px;
 }
 
 nav a {
