@@ -11,8 +11,8 @@ ctx.strokeStyle = '#ddd';
 function drawTraces() {
   traces = [];
   initPositions = [];
-  numTraces = canvas.height / 30;
-  vspace = canvas.height / (numTraces + 2);
+  numTraces = canvas.height / 10;
+  vspace = canvas.height / numTraces;
   for (let y=vspace/2; y<=canvas.height-vspace/2; y+=vspace) {
     traces.push(y);
     initPositions.push(y);
@@ -23,7 +23,7 @@ function drawTraces() {
     ctx.beginPath();
     ctx.moveTo(x, traces[i]);
     for (; x<canvas.width; x++) {
-      traces[i] += 5 * (Math.random() - (traces[i] - initPositions[i]) / (5 * vspace) - 0.5);
+      traces[i] += 2 * (Math.random() - (traces[i] - initPositions[i]) / (4 * vspace) - 0.5);
       ctx.lineTo(x, traces[i]);
     }
     ctx.stroke();
@@ -49,7 +49,7 @@ function drawTraces() {
       ctx.beginPath();
       ctx.moveTo(x - 1, traces[i]);
       for (; x<canvas.width; x++) {
-        traces[i] += 5 * (Math.random() - (traces[i] - initPositions[i]) / (5 * vspace) - 0.5);
+        traces[i] += 2 * (Math.random() - (traces[i] - initPositions[i]) / (4 * vspace) - 0.5);
         ctx.lineTo(x, traces[i]);
       }
       ctx.stroke();
