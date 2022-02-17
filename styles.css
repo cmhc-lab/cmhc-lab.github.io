@@ -75,10 +75,11 @@ h2 .cap {
 h3 {
   margin: 0px;
   font-weight: bold;
+  font-size: 1.3rem;
 }
 
 h4 {
-  margin: 0px;
+  margin: 5px 0px 0px 0px;
   font-size: 0.9rem;
   font-style: italic;
   font-weight: normal;
@@ -126,6 +127,18 @@ nav a {
   width: 100px;
 }
 
+a.back {
+  display: block;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #0645ad;
+  padding-bottom: 5px;
+}
+
+a.back img {
+  margin-right: 5px;
+  margin-bottom: -3px;
+}
+
 
 .video {
   display: block;
@@ -166,6 +179,7 @@ div.image-cropper img {
 div.links {
   display: flex;
   column-gap: 10px;
+  margin: 5px 0px 10px 0px;
 }
 
 div.project {
