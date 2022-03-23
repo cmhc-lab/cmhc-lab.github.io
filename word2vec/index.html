@@ -3,12 +3,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="author" content="Marijn van Vliet">
+    <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="style.css">
     <script src="word2vec.js" defer></script>
     <script src="indexeddb.js" defer></script>
   </head>
   <body>
-    <img id="aalto-img" src="aalto.png" alt="Aalto University Logo"/>
+  <main>
+    <a class="back" href="../index.html"><img src="../images/nav_back.svg">Back to the CMHC lab page</a>
     <h1>Word2vec Guessing Game</h1>
     <p>Welcome to the guessing game assignment. Think of a target word and give "clue" words below that describe the target. The word2vec model will give the 10 words closest to the semantic mean of the given clues. See if you can make the computer guess your chosen target word.</p>
 
@@ -52,5 +54,7 @@
     <p><code>[2]</code> Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1310.4546.pdf">Distributed Representations of Words and Phrases and their Compositionality</a>. In Proceedings of NIPS, 2013.</p>
     
     <p><code>[3]</code> Tomas Mikolov, Wen-tau Yih, and Geoffrey Zweig.  <a href="http://research.microsoft.com/pubs/189726/rvecs.pdf">Linguistic Regularities in Continuous Space Word Representations</a>. In Proceedings of NAACL HLT, 2013.</p>
+    <img id="aalto-img" src="aalto.png" alt="Aalto University Logo"/>
+  </main>
   </body>
 </html>
