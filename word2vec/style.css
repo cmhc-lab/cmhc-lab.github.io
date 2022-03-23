@@ -1,0 +1,97 @@
+html {
+  background-color: white;
+  color: #444;
+  text-align: center;
+  font-family: times;
+}
+
+p, input, button {
+  font-size: 18px;
+}
+
+h1 {
+  font-variant: small-caps;
+  margin-bottom: 40px;
+}
+
+input[type='text'] {
+  width: 280px;
+  height: 30px;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #04a;
+  color: white;
+  border: none;
+  height: 30px;
+  font-size: 15px;
+  position: relative;
+  top: -3px;
+  width: 100px;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #04e;
+}
+
+table {
+  width: 400px;
+  margin: auto;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  background-color: #04a;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background: #def;
+}
+
+td, th {
+  padding: 5px 10px;
+}
+
+th:nth-child(1) {
+  border-radius: 5px 0px 0px 0px;
+}
+
+th:nth-child(2) {
+  border-radius: 0px 5px 0px 0px;
+}
+
+ul {
+  display: inline-block;
+  margin: 0px;
+  font-family: sans-serif;
+}
+
+li {
+  text-align: left;
+}
+
+p {
+  max-width: 600px;
+  margin: 2ex auto;
+  text-align: justify;
+}
+
+h2 {
+    margin-top: 50px;
+}
+
+#result p {
+    text-align: center;
+}
+
+code {
+  font-size: 14px;
+}
+
+#aalto-img {
+  width: 100px;
+}

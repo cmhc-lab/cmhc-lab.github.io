@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Marijn van Vliet">
+    <link rel="stylesheet" href="style.css">
+    <script src="word2vec.js" defer></script>
+    <script src="indexeddb.js" defer></script>
+  </head>
+  <body>
+    <img id="aalto-img" src="aalto.png" alt="Aalto University Logo"/>
+    <h1>Word2vec Guessing Game</h1>
+    <p>Welcome to the guessing game assignment. Think of a target word and give "clue" words below that describe the target. The word2vec model will give the 10 words closest to the semantic mean of the given clues. See if you can make the computer guess your chosen target word.</p>
+
+    <p id="loading-p">
+      <label for="loading-w2v">Downloading word2vec vectors:</label>
+      <progress id="loading-w2v" value="0" max="1"></progress>
+    </p>
+    <p>
+      <form id="query-form" onsubmit="return getClosestWords(this)">
+        <input type="text" id="word" autofocus="1" placeholder="wolf, pet">
+        <button type="submit">Compute</button>
+      </form>
+    </p>
+    <p id="result"></p>
+    
+    <h2>Things the model can do for you</h2>
+    <p>If you separate the words by a space, comma, or + sign, the model will take the vector <em>sum</em> of the semantic representations of the given words. Finally, the model will normalize the vector to be of length 1, essentially turning the sum vector into a mean vector. Examples:</p>
+    <ul>
+      <li>wolf pet</li>
+      <li>wolf, pet</li>
+      <li>wolf + pet</li>
+      <li>wolf + pet + tail + bark</li>
+    </ul>
+   
+    <p>By separating words with a - sign, the model will take the vector <em>difference</em> of the semantic representations of the given words. Taken by itself, this difference vector is not that informative. However, when combined with summation you can make the model start at the representation of a word and then make the model move in a certain direction. For example: “king - man” will compute the difference vector (i.e. the direction) from man to king and “king - man + woman” will add this difference vector to the semantic representation of “woman”. In essence, this will compute “a man is to a king as a woman is to a &hellip;?” Examples:</p>
+    <ul>
+      <li>king - man + woman</li>
+      <li>queen - king + man</li>
+      <li>Taiwan - China + Russia</li>
+      <li>leg - knee + elbow</li>
+    </ul>
+
+    <h2>Where does the data come from?</h2>
+
+    <p>The corpus that was used to create the model is a selection of Google News documents (around 100 billion words), kindly <a href="https://code.google.com/archive/p/word2vec/">provided by Google</a>. The model contains 300-dimensional vectors for 3 million words and phrases. The phrases were obtained using a simple data-driven approach described in <code>[2]</code>. The model is available here: <a href="https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing">GoogleNews-vectors-negative300.bin.gz</a>.</p>
+
+    <h2>More information about the word2vec algorithm</h2>
+
+    <p><code>[1]</code> Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1301.3781.pdf">Efficient Estimation of Word Representations in Vector Space</a>. In Proceedings of Workshop at ICLR, 2013.</p>
+    
+    <p><code>[2]</code> Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1310.4546.pdf">Distributed Representations of Words and Phrases and their Compositionality</a>. In Proceedings of NIPS, 2013.</p>
+    
+    <p><code>[3]</code> Tomas Mikolov, Wen-tau Yih, and Geoffrey Zweig.  <a href="http://research.microsoft.com/pubs/189726/rvecs.pdf">Linguistic Regularities in Continuous Space Word Representations</a>. In Proceedings of NAACL HLT, 2013.</p>
+  </body>
+</html>
