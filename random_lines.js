@@ -5,7 +5,7 @@ canvas.width = window.innerWidth;
 const ctx = canvas.getContext('2d');
 ctx.fillStyle = '#ffffff';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
-ctx.strokeStyle = '#eee';
+ctx.strokeStyle = '#fafafa';
 //ctx.strokeStyle = 'white';
 
 function drawTraces() {

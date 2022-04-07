@@ -6,12 +6,17 @@
   <meta name="author" content="Marijn van Vliet" />
   <script src="random_lines.js" defer></script>
   <script src="code.js" defer></script>
+  <script src="logoswitch.js" defer></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <canvas id="brainwaves"></canvas>
   <div id="code"></div>
   <main>
+    <div id="logos">
+      <a href="https://aalto.fi"><img src="images/logo_aalto1.svg" alt="Aalto University, School of Science" onload="logoSwitch(this)"/></a>
+      <a href="https://www.aalto.fi/en/department-of-neuroscience-and-biomedical-engineering"><img src="images/logo_nbe.svg" alt="Department of Neuroimaging and Biomedical Engineering"/></a>
+    </div>
     <h1>
       <span class="lab">Aalto University's laboratory for</span>
       <span class="cap">C</span>omputational

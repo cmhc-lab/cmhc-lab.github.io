@@ -42,6 +42,13 @@ main {
   border-right: 1px solid #ddd;
 }
 
+#logos {
+  text-align: right;
+}
+#logos img {
+  height: 75px;
+}
+
 h1 {
   line-height: 150%;
 }
@@ -87,7 +94,7 @@ h4 {
 
 
 a, a:visited {
-  color: #0645ad;
+  color: #005EB8;
   text-decoration: none;
 }
 
@@ -130,7 +137,7 @@ nav a {
 a.back {
   display: block;
   font-size: 1.3rem;
-  border-bottom: 1px solid #0645ad;
+  border-bottom: 1px solid #005EB8;
   padding-bottom: 5px;
 }
 
