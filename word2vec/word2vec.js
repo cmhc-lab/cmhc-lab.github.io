@@ -75,12 +75,12 @@ async function loadVectors() {
 
   const VEC_SIZE_BYTES = 4 * 300;
 
-  let response = await fetch('https://www.googleapis.com/drive/v3/files/1XnnCAKDD4ePAZVpM9rzgclfFMFVIOTDO?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
+  let response = await fetch('https://www.googleapis.com/drive/v3/files/1QOZoRDFd3K9mMQ54QwdOWeE72PaO9PYv?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
   const text = await blobToText(await response.blob());
   const vocab = text.split('\r\n');
   const nVectors = vocab.length;
 
-  response = await fetch('https://www.googleapis.com/drive/v3/files/1cddc2pjjOwKrOBAWyUbhFJFyitO4ggXU?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM')
+  response = await fetch('https://www.googleapis.com/drive/v3/files/1kBFKvTQQdbB3uWpkCXiufqjSXJb-PGbp?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
   const reader = response.body.getReader();
   let bytesRead = 0;
   let vectsRead = 0;
@@ -262,6 +262,7 @@ function getComparison(form) {
   for(i=0; i<Math.min(neg.length, pos.length); i++) {
     try {
       negVec = vectors[neg[i]];
+      console.log(neg[i], negVec);
       if(negVec == undefined) {
         notFound(neg[i]);
         return false;
@@ -272,6 +273,7 @@ function getComparison(form) {
     }
     try {
       posVec = vectors[pos[i]];
+      console.log(pos[i], posVec);
       if(posVec == undefined) {
         notFound(pos[i]);
         return false;
@@ -281,8 +283,10 @@ function getComparison(form) {
       return false;
     }
     vec = addVectors(vec, subVectors(posVec, negVec));
+    console.log('vec', vec);
   }
   vec = normVector(vec);
+  console.log('vec_norm', vec);
 
   const words = form.words.value.split(/[\s,]/).filter(w => w.length > 0);
   let scores = {};
