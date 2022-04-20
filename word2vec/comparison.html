@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Marijn van Vliet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="word2vec.js" defer></script>
+  </head>
+  <body>
+  <main>
+    <a class="back" href="../index.html"><img src="../images/nav_back.svg">Back to the CMHC lab page</a>
+    <h1>Word2vec Comparison </h1>
+    <p>Welcome to the word comparison experiment, based on the work of <a href="https://arxiv.org/pdf/1802.01241.pdf">Grand et al. <code>[1]</code></a>. Describe a dimension by thinking of words that create a contrast. Make sure to enter them &quot;pairwise&quot;, meaning that the first negative word is the antonym of the first positive word. Finally, enter some words to be compared along the dimension.</p>
+
+    <p id="loading-p">
+      <label for="loading-w2v">Downloading word2vec vectors:</label>
+      <progress id="loading-w2v" value="0" max="1"></progress>
+    </p>
+    <p>
+      <form id="query-form" onsubmit="return getComparison(this)">
+        <h2>Step 1: Define a dimension along which to compare</h2>
+        <label for="negative_words">Negative words:</label>
+        <input type="text" id="negative_words" autofocus="1" placeholder="small, tiny, puny" required><br>
+        <label for="positive_words">Positive words:</label>
+        <input type="text" id="positive_words" placeholder="large, big, huge" required>
+
+        <h2>Step 2: Give some words to compare with each other</h2>
+        Words to compare: <input type="text" id="words" placeholder="mouse, elephant" required>
+        <button type="submit">Compare</button>
+      </form>
+    </p>
+    <p id="result"></p>
+    
+    <h2>Examples</h2>
+    <p>Here are some example dimensions to try:</p>
+    <ul>
+      <li><strong>age:</strong> old ancient elderly - young youth child</li>
+      <li><strong>arousal:</strong> interesting exciting fun - boring unexciting dull</li>
+      <li><strong>cost:</strong> expensive costly fancy - inexpensive cheap budget</li>
+      <li><strong>danger:</strong> dangerous deadly threatening - safe harmless calm</li>
+      <li><strong>gender:</strong> male masculine man - female feminine woman</li>
+      <li><strong>intelligence:</strong> intelligent smart wise - stupid dumb idiotic</li>
+      <li><strong>location:</strong> indoor indoors inside - outdoor outdoors outside</li>
+      <li><strong>loudness:</strong> loud deafening noisy - soft silent quiet</li>
+      <li><strong>political:</strong> democrat liberal progressive - republican conservative redneck</li>
+      <li><strong>religiosity:</strong> religious spiritual orthodox - atheist secular agnostic</li>
+      <li><strong>size:</strong> large big huge - small little tiny</li>
+      <li><strong>speed:</strong> fast speedy quick - slow sluggish gradual</li>
+      <li><strong>temperature:</strong> hot warm tropical - cold cool frigid</li>
+      <li><strong>valence:</strong> good great happy - bad awful sad</li>
+      <li><strong>wealth:</strong> rich wealthy privileged - poor poverty underprivileged</li>
+      <li><strong>weight:</strong> heavy fat thick - light skinny thin</li>
+      <li><strong>wetness:</strong> wet water ocean - dry country land</li>
+    </ul>
+   
+    <h2>Where does the data come from?</h2>
+
+    <p>The corpus that was used to create the model is a selection of Google News documents (around 100 billion words), kindly <a href="https://code.google.com/archive/p/word2vec/">provided by Google</a>. The model contains 300-dimensional vectors for 3 million words and phrases. The phrases were obtained using a simple data-driven approach described in <code>[3]</code>. The model is available here: <a href="https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing">GoogleNews-vectors-negative300.bin.gz</a>.</p>
+
+    <h2>More information about the comparison algorithm</h2>
+
+    <p><code>[1]</code>Gabriel Grand, Idan Asher Blank, Francisco Pereira, and Evelina Fedorenko. <a href="https://arxiv.org/pdf/1802.01241.pdf">Semantic projection recovers rich human knowledge of multiple object features from word embeddings</a>. Nature Human Behavior, 2022.</p>
+
+
+    <h2>More information about the word2vec algorithm</h2>
+
+    <p><code>[2]</code> Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1301.3781.pdf">Efficient Estimation of Word Representations in Vector Space</a>. In Proceedings of Workshop at ICLR, 2013.</p>
+    
+    <p><code>[3]</code> Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1310.4546.pdf">Distributed Representations of Words and Phrases and their Compositionality</a>. In Proceedings of NIPS, 2013.</p>
+    
+    <p><code>[4]</code> Tomas Mikolov, Wen-tau Yih, and Geoffrey Zweig.  <a href="http://research.microsoft.com/pubs/189726/rvecs.pdf">Linguistic Regularities in Continuous Space Word Representations</a>. In Proceedings of NAACL HLT, 2013.</p>
+    <img id="aalto-img" src="aalto.png" alt="Aalto University Logo"/>
+  </main>
+  </body>
+</html>

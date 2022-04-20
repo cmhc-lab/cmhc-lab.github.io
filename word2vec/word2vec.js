@@ -1,4 +1,4 @@
-function blobToFloats(blob) {
+function blobToArrayBuffer(blob) {
   return new Promise((resolve, reject) => {
     let reader = new FileReader();
     reader.onload = () => resolve(reader.result);
@@ -27,9 +27,8 @@ function dbConnect() {
     };
 
     request.onupgradeneeded = function(e) {
-      console.log('Upgrading DB', e.oldVersion, e.newVersion);
       if(e.oldVersion === 0) {
-        vectors = request.result.createObjectStore('vectors', {keyPath: 'word'});
+        vectors = request.result.createObjectStore('vectors', {keyPath: 'key'});
       }
     }
   });
@@ -37,48 +36,50 @@ function dbConnect() {
 
 async function loadVectors() {
   const db = await dbConnect();
-  let totalVectors = await new Promise(resolve => {
+
+  let dataPresent = await new Promise(resolve => {
     const trans = db.transaction('vectors', 'readonly');
     let store = trans.objectStore('vectors');
     store.count().onsuccess = e => resolve(e.target.result);
   })
-  if(totalVectors > 0) {
+  if(dataPresent >= 2) {
     console.log('We already have data.');
 
-    vectors = {};
     let nVectors = 0;
-    let store = await new Promise(resolve => {
+    let vocab = await new Promise(resolve => {
       const trans = db.transaction('vectors', 'readonly');
       let store = trans.objectStore('vectors');
-      let request = store.openCursor();
+      let request = store.get('vocab');
       request.onsuccess = function(e) {
-        let cursor = e.target.result;
-        if(cursor) {
-          vectors[cursor.value.word] = cursor.value.vector;
-          if(nVectors % 100 == 0) {
-            document.getElementById('loading-w2v').value = nVectors / totalVectors;
-          }
-          nVectors += 1;
-          cursor.continue();
-        } else {
-          resolve();
-        }
+        resolve(e.target.result);
       };
     });
-    return vectors;
-  } else {
-    console.log('Downloading data...');
+    vocab = vocab.text.split('\r\n');
+    let vectorsBlob = await new Promise(resolve => {
+      const trans = db.transaction('vectors', 'readonly');
+      let store = trans.objectStore('vectors');
+      let request = store.get('vectors');
+      request.onsuccess = function(e) {
+        resolve(e.target.result);
+      };
+    });
+    vectors = new Float32Array(await blobToArrayBuffer(new Blob([vectorsBlob.blob], {type: 'application/octet-stream'})));
+    const dict = {};
+    for(let i=0; i<vocab.length; i++) {
+      dict[vocab[i]] = vectors.slice(i * 300, (i + 1) * 300);
+    }
+    return dict;
   }
+
+  console.log('Downloading data...');
 
   const VEC_SIZE_BYTES = 4 * 300;
 
-  //let response = await fetch('vocab.txt');
   let response = await fetch('https://www.googleapis.com/drive/v3/files/1XnnCAKDD4ePAZVpM9rzgclfFMFVIOTDO?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
   const text = await blobToText(await response.blob());
   const vocab = text.split('\r\n');
   const nVectors = vocab.length;
 
-  //response = await fetch('vectors.bin');
   response = await fetch('https://www.googleapis.com/drive/v3/files/1cddc2pjjOwKrOBAWyUbhFJFyitO4ggXU?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM')
   const reader = response.body.getReader();
   let bytesRead = 0;
@@ -94,27 +95,28 @@ async function loadVectors() {
 
     buf.set(value, bytesRead);
     bytesRead += value.length;
-    let vectsReady = Math.floor(bytesRead / VEC_SIZE_BYTES);
-    let vectsToRead = vectsReady - vectsRead;
-
-    await new Promise(resolve => {
-      const trans = db.transaction('vectors', 'readwrite');
-      trans.oncomplete = resolve;
-      const store = trans.objectStore('vectors');
-      for(let i=0; i<vectsToRead; i++) {
-        let word = vocab[vectsRead + i];
-        let vector = new Float32Array(buf.slice(vectsRead * VEC_SIZE_BYTES + i * VEC_SIZE_BYTES, vectsRead * VEC_SIZE_BYTES + (i + 1) * VEC_SIZE_BYTES).buffer);
-        store.put({word: word, vector: vector}).onsuccess = function(e) {
-          if((vectsRead + i) % 100 == 0) {
-            document.getElementById('loading-w2v').value = (vectsRead + i) / nVectors;
-          }
-        }
-        dict[word] = vector;
-      }
-    });
-
-    vectsRead = vectsReady;
+    document.getElementById('loading-w2v').value = (bytesRead) / buf.length;
   }
+
+  console.log('Storing vectors in local database')
+  await new Promise(resolve => {
+    const trans = db.transaction('vectors', 'readwrite');
+    trans.oncomplete = resolve;
+    const store = trans.objectStore('vectors');
+    store.put({key: 'vectors', blob: buf});
+  });
+  await new Promise(resolve => {
+    const trans = db.transaction('vectors', 'readwrite');
+    trans.oncomplete = resolve;
+    const store = trans.objectStore('vectors');
+    store.put({key: 'vocab', text: text});
+  });
+
+  vectors = new Float32Array(await blobToArrayBuffer(new Blob([buf.buffer], {type: 'application/octet-stream'})));
+  for(let i=0; i<nVectors; i++) {
+    dict[vocab[i]] = vectors.slice(i * 300, (i + 1) * 300);
+  }
+
   return dict;
 }
 
@@ -198,11 +200,111 @@ function getClosestWords(form) {
   let html = '<p>Words most related to: <strong>' + asHTML(form.word.value) + '</strong></p>';
   html += '<table id="results">';
   html += '<tr><th>Word</th><th>Score</th></tr>';
-  for(var i=0; i<top_10.length; i++) {
+  for(let i=0; i<top_10.length; i++) {
     html += '<tr><td>' + asHTML(top_10[i].word) + '</td>';
     html += '<td>' + asHTML(top_10[i].dist.toFixed(3)) + '</td></tr>';
   }
   html += '</table>';
   document.getElementById('result').innerHTML = html;
   return false
+}
+
+function addVectors(a, b) {
+  res = new Float32Array(a.length);
+  for(let i=0; i<a.length; i++) {
+    res[i] = a[i] + b[i];
+  }
+  return res;
+}
+
+function subVectors(a, b) {
+  res = new Float32Array(a.length);
+  for(let i=0; i<a.length; i++) {
+    res[i] = a[i] - b[i];
+  }
+  return res;
+}
+
+function normVector(a) {
+  let norm = 0;
+  for(let i=0; i<a.length; i++) {
+    norm += a[i] * a[i];
+  }
+  norm = Math.sqrt(norm);
+  res = new Float32Array(a.length);
+  for(let i=0; i<a.length; i++) {
+    res[i] = a[i] / norm;
+  }
+  return res;
+}
+
+function projVector(a, b) {
+  let score = 0;
+  for(let i=0; i<a.length; i++) {
+    score += a[i] * b[i];
+  }
+  return score;
+}
+
+function notFound(word) {
+  document.getElementById('result').innerHTML = '<strong>' + asHTML(word) + '</strong> not present in language model. Check spelling and capitalization (names of people and countries should start with a capital letter).';
+}
+
+
+function getComparison(form) {
+  let vec = new Float32Array(300);
+  const neg = form.negative_words.value.split(/[\s,]/).filter(w => w.length > 0);
+  const pos = form.positive_words.value.split(/[\s,]/).filter(w => w.length > 0);
+  console.log(neg, pos, Math.min(neg.length, pos.length));
+  let i = 0;
+  let negVec = undefined;
+  let posVec = undefined;
+  for(i=0; i<Math.min(neg.length, pos.length); i++) {
+    try {
+      negVec = vectors[neg[i]];
+      if(negVec == undefined) {
+        notFound(neg[i]);
+        return false;
+      }
+    } catch(err) {
+      notFound(neg[i]);
+      return false;
+    }
+    try {
+      posVec = vectors[pos[i]];
+      if(posVec == undefined) {
+        notFound(pos[i]);
+        return false;
+      }
+    } catch(err) {
+      notFound(pos[i]);
+      return false;
+    }
+    vec = addVectors(vec, subVectors(posVec, negVec));
+  }
+  vec = normVector(vec);
+
+  const words = form.words.value.split(/[\s,]/).filter(w => w.length > 0);
+  let scores = {};
+  for(i=0; i<words.length; i++) {
+    try {
+      scores[words[i]] = projVector(vectors[words[i]], vec);
+    } catch(err) {
+      notFound(words[i]);
+      return false;
+    }
+  }
+
+  words.sort((a, b) => scores[a] - scores[b]);
+
+  let html = '<p>Comparing: <strong>' + asHTML(form.words.value) + '</strong></p>';
+  html += '<table id="results">';
+  html += '<tr><th>Word</th><th>Score</th></tr>';
+  for(let i=0; i<words.length; i++) {
+    html += '<tr><td>' + asHTML(words[i]) + '</td>';
+    html += '<td>' + asHTML(scores[words[i]].toFixed(3)) + '</td></tr>';
+  }
+  html += '</table>';
+  document.getElementById('result').innerHTML = html;
+  return false;
 }
