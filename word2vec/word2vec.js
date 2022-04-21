@@ -18,7 +18,7 @@ function blobToText(blob) {
 
 function dbConnect() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('vectors', 2);
+    const request = indexedDB.open('vectors', 3);
     request.onsuccess = e => resolve(e.target.result);
 
     request.onerror = function(e) {
@@ -27,19 +27,28 @@ function dbConnect() {
     };
 
     request.onupgradeneeded = function(e) {
-      if(e.oldVersion === 0) {
-        vectors = request.result.createObjectStore('vectors', {keyPath: 'key'});
+      if(e.oldVersion < 3) {
+        vectors = request.result.createObjectStore('glove-en', {keyPath: 'key'});
+        vectors = request.result.createObjectStore('word2vec-en', {keyPath: 'key'});
+        vectors = request.result.createObjectStore('word2vec-fi', {keyPath: 'key'});
       }
     }
   });
 }
 
-async function loadVectors() {
+var VEC_SIZE = 300;
+
+async function loadVectorData(vectorType) {
+  if(vectorType == 'word2vec-fi') {
+    VEC_SIZE = 200;
+  }
+  const VEC_SIZE_BYTES = 4 * VEC_SIZE;
+
   const db = await dbConnect();
 
   let dataPresent = await new Promise(resolve => {
-    const trans = db.transaction('vectors', 'readonly');
-    let store = trans.objectStore('vectors');
+    const trans = db.transaction(vectorType, 'readonly');
+    let store = trans.objectStore(vectorType);
     store.count().onsuccess = e => resolve(e.target.result);
   })
   if(dataPresent >= 2) {
@@ -47,8 +56,8 @@ async function loadVectors() {
 
     let nVectors = 0;
     let vocab = await new Promise(resolve => {
-      const trans = db.transaction('vectors', 'readonly');
-      let store = trans.objectStore('vectors');
+      const trans = db.transaction(vectorType, 'readonly');
+      let store = trans.objectStore(vectorType);
       let request = store.get('vocab');
       request.onsuccess = function(e) {
         resolve(e.target.result);
@@ -56,8 +65,8 @@ async function loadVectors() {
     });
     vocab = vocab.text.split('\r\n');
     let vectorsBlob = await new Promise(resolve => {
-      const trans = db.transaction('vectors', 'readonly');
-      let store = trans.objectStore('vectors');
+      const trans = db.transaction(vectorType, 'readonly');
+      let store = trans.objectStore(vectorType);
       let request = store.get('vectors');
       request.onsuccess = function(e) {
         resolve(e.target.result);
@@ -66,21 +75,36 @@ async function loadVectors() {
     vectors = new Float32Array(await blobToArrayBuffer(new Blob([vectorsBlob.blob], {type: 'application/octet-stream'})));
     const dict = {};
     for(let i=0; i<vocab.length; i++) {
-      dict[vocab[i]] = vectors.slice(i * 300, (i + 1) * 300);
+      dict[vocab[i]] = vectors.slice(i * VEC_SIZE, (i + 1) * VEC_SIZE);
     }
     return dict;
   }
 
   console.log('Downloading data...');
 
-  const VEC_SIZE_BYTES = 4 * 300;
-
-  let response = await fetch('https://www.googleapis.com/drive/v3/files/1QOZoRDFd3K9mMQ54QwdOWeE72PaO9PYv?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
+  let response = undefined;
+  if(vectorType == 'glove-en') {
+    response = await fetch('https://www.googleapis.com/drive/v3/files/1QOZoRDFd3K9mMQ54QwdOWeE72PaO9PYv?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
+  } else if(vectorType == 'word2vec-en') {
+    response = await fetch('https://www.googleapis.com/drive/v3/files/1XnnCAKDD4ePAZVpM9rzgclfFMFVIOTDO?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
+  } else if(vectorType == 'word2vec-fi') {
+    response = await fetch('https://www.googleapis.com/drive/v3/files/1yrjhCpdORG2q_jf5aONFatrykPW2buVX?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
+  } else {
+    throw 'Unknown vector type: ' + vectorType; 
+  }
   const text = await blobToText(await response.blob());
   const vocab = text.split('\r\n');
   const nVectors = vocab.length;
 
-  response = await fetch('https://www.googleapis.com/drive/v3/files/1kBFKvTQQdbB3uWpkCXiufqjSXJb-PGbp?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
+  if(vectorType == 'glove-en') {
+    response = await fetch('https://www.googleapis.com/drive/v3/files/1kBFKvTQQdbB3uWpkCXiufqjSXJb-PGbp?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
+  } else if(vectorType == 'word2vec-en') {
+    response = await fetch('https://www.googleapis.com/drive/v3/files/1cddc2pjjOwKrOBAWyUbhFJFyitO4ggXU?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
+  } else if(vectorType == 'word2vec-fi') {
+    response = await fetch('https://www.googleapis.com/drive/v3/files/1A-o4Tk-o2s9YHOddEIZyaJAZ3Ss0kV-x?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
+  } else {
+    throw 'Unknown vector type: ' + vectorType; 
+  }
   const reader = response.body.getReader();
   let bytesRead = 0;
   let vectsRead = 0;
@@ -100,42 +124,37 @@ async function loadVectors() {
 
   console.log('Storing vectors in local database')
   await new Promise(resolve => {
-    const trans = db.transaction('vectors', 'readwrite');
+    const trans = db.transaction(vectorType, 'readwrite');
     trans.oncomplete = resolve;
-    const store = trans.objectStore('vectors');
+    const store = trans.objectStore(vectorType);
     store.put({key: 'vectors', blob: buf});
   });
   await new Promise(resolve => {
-    const trans = db.transaction('vectors', 'readwrite');
+    const trans = db.transaction(vectorType, 'readwrite');
     trans.oncomplete = resolve;
-    const store = trans.objectStore('vectors');
+    const store = trans.objectStore(vectorType);
     store.put({key: 'vocab', text: text});
   });
 
   vectors = new Float32Array(await blobToArrayBuffer(new Blob([buf.buffer], {type: 'application/octet-stream'})));
   for(let i=0; i<nVectors; i++) {
-    dict[vocab[i]] = vectors.slice(i * 300, (i + 1) * 300);
+    dict[vocab[i]] = vectors.slice(i * VEC_SIZE, (i + 1) * VEC_SIZE);
   }
 
   return dict;
 }
 
-async function loadWord2Vec() {
+async function loadVectors(vectorType) {
   document.getElementById('loading-p').style.display = 'block';
   document.getElementById('query-form').style.display = 'none';
 
-  vectors = await loadVectors();
+  vectors = await loadVectorData(vectorType);
 
   document.getElementById('loading-p').style.display = 'none';
   document.getElementById('query-form').style.display = 'block';
 
   return vectors;
 }
-
-var vectors = undefined;
-window.onload = async function(e) {
-  vectors = await loadWord2Vec();
-};
 
 function asHTML(str) {
   div = document.createElement('div');
@@ -146,7 +165,7 @@ function asHTML(str) {
 function getClosestWords(form) {
   const words = form.word.value.split(/([\s,\+\-])/);
   let queryWords = []; 
-  let vectorRef = new Float32Array(300);
+  let vectorRef = new Float32Array(VEC_SIZE);
   let sign = +1;
   for(let i=0; i<words.length; i++) {
     if(words[i].length == 0 || words[i] == ' ') continue;
@@ -161,7 +180,7 @@ function getClosestWords(form) {
 
     try {
       let vector = vectors[words[i]];
-      for(let j=0; j<300; j++) {
+      for(let j=0; j<vector.length; j++) {
         vectorRef[j] += sign * vector[j];
       }
     } catch(err) {
@@ -173,11 +192,7 @@ function getClosestWords(form) {
     sign = +1;
   }
 
-  let vectorRefLength = Math.sqrt(vectorRef.reduce((partialSum, a) => partialSum + a * a, 0));
-  vectorRef = vectorRef.map(a => a / vectorRefLength);
-
-  console.log(`Vector for ${queryWords}`);
-  console.log(vectorRef);
+  vectorRef = normVector(vectorRef);
 
   let top_k = 10;
   let top_10 = [];
@@ -186,7 +201,7 @@ function getClosestWords(form) {
       continue;
     }
     dist = 0;
-    for(let i=0; i<300; i++) {
+    for(let i=0; i<vector.length; i++) {
       diff = vectorRef[i] - vector[i];
       dist += diff * diff;
     }
@@ -252,17 +267,15 @@ function notFound(word) {
 
 
 function getComparison(form) {
-  let vec = new Float32Array(300);
+  let vec = new Float32Array(VEC_SIZE);
   const neg = form.negative_words.value.split(/[\s,]/).filter(w => w.length > 0);
   const pos = form.positive_words.value.split(/[\s,]/).filter(w => w.length > 0);
-  console.log(neg, pos, Math.min(neg.length, pos.length));
   let i = 0;
   let negVec = undefined;
   let posVec = undefined;
   for(i=0; i<Math.min(neg.length, pos.length); i++) {
     try {
       negVec = vectors[neg[i]];
-      console.log(neg[i], negVec);
       if(negVec == undefined) {
         notFound(neg[i]);
         return false;
@@ -273,7 +286,6 @@ function getComparison(form) {
     }
     try {
       posVec = vectors[pos[i]];
-      console.log(pos[i], posVec);
       if(posVec == undefined) {
         notFound(pos[i]);
         return false;
@@ -283,10 +295,8 @@ function getComparison(form) {
       return false;
     }
     vec = addVectors(vec, subVectors(posVec, negVec));
-    console.log('vec', vec);
   }
   vec = normVector(vec);
-  console.log('vec_norm', vec);
 
   const words = form.words.value.split(/[\s,]/).filter(w => w.length > 0);
   let scores = {};

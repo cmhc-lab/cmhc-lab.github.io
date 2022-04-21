@@ -9,7 +9,7 @@
     <script defer>
       var vectors = undefined;
       window.onload = async function(e) {
-        vectors = await loadVectors('word2vec-en');
+        vectors = await loadVectors('word2vec-fi');
         for (const [key, value] of Object.entries(vectors)) {
           vectors[key] = normVector(value);
         }
@@ -23,7 +23,7 @@
     <p>Welcome to the guessing game assignment. Think of a target word and give "clue" words below that describe the target. The word2vec model will give the 10 words closest to the semantic mean of the given clues. See if you can make the computer guess your chosen target word.</p>
 
     <p id="loading-p">
-      <label for="loading-w2v">Downloading English word2vec vectors:</label>
+      <label for="loading-w2v">Downloading Finnish word2vec vectors:</label>
       <progress id="loading-w2v" value="0" max="1"></progress>
     </p>
     <p>
@@ -53,15 +53,17 @@
 
     <h2>Where does the data come from?</h2>
 
-    <p>The corpus that was used to create the model is a selection of Google News documents (around 100 billion words), kindly <a href="https://code.google.com/archive/p/word2vec/">provided by Google</a>. The model contains 300-dimensional vectors for 3 million words and phrases. The phrases were obtained using a simple data-driven approach described in <code>[2]</code>. The model is available here: <a href="https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing">GoogleNews-vectors-negative300.bin.gz</a>.</p>
+    <p>The data was collected by the <a href="https://turkunlp.org/finnish_nlp.html">Turku NLP</a> group. The main publication describing the dataset is here:</p>
+
+    <p><code>[1]</code>J. Luotolahti, J. Kanerva, V. Laippala, S. Pyysalo, and F. Ginter. <a href="https://aclanthology.org/W15-2124.pdf">Towards Universal Web Parsebanks</a>. Proceedings of the International Conference on Dependency Linguistics (Depling’15). 2015</p>
 
     <h2>More information about the word2vec algorithm</h2>
 
-    <p><code>[1]</code> Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1301.3781.pdf">Efficient Estimation of Word Representations in Vector Space</a>. In Proceedings of Workshop at ICLR, 2013.</p>
+    <p><code>[2]</code> Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1301.3781.pdf">Efficient Estimation of Word Representations in Vector Space</a>. In Proceedings of Workshop at ICLR, 2013.</p>
     
-    <p><code>[2]</code> Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1310.4546.pdf">Distributed Representations of Words and Phrases and their Compositionality</a>. In Proceedings of NIPS, 2013.</p>
+    <p><code>[3]</code> Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1310.4546.pdf">Distributed Representations of Words and Phrases and their Compositionality</a>. In Proceedings of NIPS, 2013.</p>
     
-    <p><code>[3]</code> Tomas Mikolov, Wen-tau Yih, and Geoffrey Zweig.  <a href="http://research.microsoft.com/pubs/189726/rvecs.pdf">Linguistic Regularities in Continuous Space Word Representations</a>. In Proceedings of NAACL HLT, 2013.</p>
+    <p><code>[4]</code> Tomas Mikolov, Wen-tau Yih, and Geoffrey Zweig.  <a href="http://research.microsoft.com/pubs/189726/rvecs.pdf">Linguistic Regularities in Continuous Space Word Representations</a>. In Proceedings of NAACL HLT, 2013.</p>
     <img id="aalto-img" src="aalto.png" alt="Aalto University Logo"/>
   </main>
   </body>

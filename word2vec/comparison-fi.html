@@ -9,18 +9,18 @@
     <script defer>
       var vectors = undefined;
       window.onload = async function(e) {
-        vectors = await loadVectors('glove-en');
+        vectors = await loadVectors('word2vec-fi');
       };
     </script>
   </head>
   <body>
   <main>
     <a class="back" href="../index.html"><img src="../images/nav_back.svg">Back to the CMHC lab page</a>
-    <h1>Word Comparison through Semantic Projection</h1>
-    <p>Welcome to the word comparison experiment, based on the work of <a href="https://arxiv.org/pdf/1802.01241.pdf">Grand et al. <code>[1]</code></a>. Describe a dimension by thinking of words that create a contrast. Make sure to enter them &quot;pairwise&quot;, meaning that the first negative word is the antonym of the first positive word. Finally, enter some words to be compared along the dimension.</p>
+    <h1>Word Comparison through Semantic Projection (Finnish version)</h1>
+    <p>Welcome to the word comparison experiment, based on the work of <a href="https://arxiv.org/pdf/1802.01241.pdf">Grand et al. <code>[2]</code></a>. Describe a dimension by thinking of words that create a contrast. Make sure to enter them &quot;pairwise&quot;, meaning that the first negative word is the antonym of the first positive word. Finally, enter some words to be compared along the dimension.</p>
 
     <p id="loading-p">
-      <label for="loading-w2v">Downloading English GloVe vectors:</label>
+      <label for="loading-w2v">Downloading Finnish word2vec vectors:</label>
       <progress id="loading-w2v" value="0" max="1"></progress>
     </p>
     <p>
@@ -62,22 +62,25 @@
    
     <h2>Where does the data come from?</h2>
 
-    <p>The corpus that was used to create the model is a crawl of <a href="https://wikipedia.com">Wikipedia</a> done in 2014, plus the <a href="https://catalog.ldc.upenn.edu/LDC2011T07">Gigaword 5</a> corpus of the Linguistic Data Consortium. The model contains 300-dimensional vectors for 6 billion words and phrases, although in this example only the top 100k most common words are present to reduce download times. The phrases were obtained using a simple data-driven approach described in <code>[2]</code>. The model is available here: <a href="https://nlp.stanford.edu/projects/glove/">https://nlp.stanford.edu/projects/glove/</a>.</p>
+    <p>The data was collected by the <a href="https://turkunlp.org/finnish_nlp.html">Turku NLP</a> group. The main publication describing the dataset is here:</p>
+
+    <p><code>[1]</code>J. Luotolahti, J. Kanerva, V. Laippala, S. Pyysalo, and F. Ginter. <a href="https://aclanthology.org/W15-2124.pdf">Towards Universal Web Parsebanks</a>. Proceedings of the International Conference on Dependency Linguistics (Depling’15). 2015</p>
 
     <h2>More information about the comparison algorithm</h2>
 
     <p>To be clear, Aalto University's CMHC lab has nothing to do with the comparison algorithm, we just showcase it on our website. The comparison algorithm was published here:</p>
 
-    <p><code>[1]</code>Gabriel Grand, Idan Asher Blank, Francisco Pereira, and Evelina Fedorenko. <a href="https://arxiv.org/pdf/1802.01241.pdf">Semantic projection recovers rich human knowledge of multiple object features from word embeddings</a>. Nature Human Behavior, 2022.</p>
+    <p><code>[2]</code>Gabriel Grand, Idan Asher Blank, Francisco Pereira, and Evelina Fedorenko. <a href="https://arxiv.org/pdf/1802.01241.pdf">Semantic projection recovers rich human knowledge of multiple object features from word embeddings</a>. Nature Human Behavior, 2022.</p>
 
-    <p>The algorithm works by first creating a difference vectors between the GloVe vectors of two words (labeled &quot;positive&quot; and &quot;negative&quot; in the interface above). Then, the GloVe vectors of each of the words to compare are projected onto the difference vector. To obtain a more reliable difference vector, we can average across multiple difference vectors, hence you are able to specify multiple &quot;positive&quot; and &quot;negative&quot; words in the interface.</p>
+    <p>The algorithm works by first creating a difference vectors between the word2vec vectors of two words (labeled &quot;positive&quot; and &quot;negative&quot; in the interface above). Then, the word2vec vectors of each of the words to compare are projected onto the difference vector. To obtain a more reliable difference vector, we can average across multiple difference vectors, hence you are able to specify multiple &quot;positive&quot; and &quot;negative&quot; words in the interface.</p>
 
-    <h2>More information about the GloVe algorithm</h2>
+    <h2>More information about the word2vec algorithm</h2>
 
-    <p><a href="https://nlp.stanford.edu/projects/glove/"/>GloVe</a> is an unsupervised learning algorithm for obtaining vector representations for words. Training is performed on aggregated global word-word co-occurrence statistics from a corpus, and the resulting representations showcase interesting linear substructures of the word vector space.</p>
-
-    <p><code>[2]</code>Jeffrey Pennington, Richard Socher, and Christopher D. Manning. <a href="https://nlp.stanford.edu/pubs/glove.pdf">GloVe: Global Vectors for Word Representation.</a> 2014.
-
+    <p><code>[3]</code> Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1301.3781.pdf">Efficient Estimation of Word Representations in Vector Space</a>. In Proceedings of Workshop at ICLR, 2013.</p>
+    
+    <p><code>[4]</code> Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. <a href="http://arxiv.org/pdf/1310.4546.pdf">Distributed Representations of Words and Phrases and their Compositionality</a>. In Proceedings of NIPS, 2013.</p>
+    
+    <p><code>[5]</code> Tomas Mikolov, Wen-tau Yih, and Geoffrey Zweig.  <a href="http://research.microsoft.com/pubs/189726/rvecs.pdf">Linguistic Regularities in Continuous Space Word Representations</a>. In Proceedings of NAACL HLT, 2013.</p>
     <img id="aalto-img" src="aalto.png" alt="Aalto University Logo"/>
   </main>
   </body>
