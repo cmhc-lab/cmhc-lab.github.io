@@ -202,6 +202,17 @@ div.project p {
   line-height: 120%;
 }
 
+div.project a.poster {
+  display: box;
+  float: right;
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+div.project a.poster img {
+  width: 200px;
+}
+
 div.model {
   position: relative;
   width: 350px;
