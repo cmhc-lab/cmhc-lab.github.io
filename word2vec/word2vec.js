@@ -51,7 +51,7 @@ async function loadVectorData(vectorType) {
     let store = trans.objectStore(vectorType);
     store.count().onsuccess = e => resolve(e.target.result);
   })
-  if(dataPresent >= 3) {
+  if(dataPresent >= 2) {
     console.log('We already have data.');
 
     let nVectors = 0;
@@ -64,7 +64,6 @@ async function loadVectorData(vectorType) {
       };
     });
     vocab = vocab.text.split('\r\n');
-
     let vectorsBlob = await new Promise(resolve => {
       const trans = db.transaction(vectorType, 'readonly');
       let store = trans.objectStore(vectorType);
@@ -74,20 +73,9 @@ async function loadVectorData(vectorType) {
       };
     });
     vectors = new Float32Array(await blobToArrayBuffer(new Blob([vectorsBlob.blob], {type: 'application/octet-stream'})));
-
-    let pcaBlob = await new Promise(resolve => {
-      const trans = db.transaction(vectorType, 'readonly');
-      let store = trans.objectStore(vectorType);
-      let request = store.get('pca');
-      request.onsuccess = function(e) {
-        resolve(e.target.result);
-      };
-    });
-    pca = new Float32Array(await blobToArrayBuffer(new Blob([pcaBlob.blob], {type: 'application/octet-stream'})));
-
     const dict = {};
     for(let i=0; i<vocab.length; i++) {
-      dict[vocab[i]] = {vector: vectors.slice(i * VEC_SIZE, (i + 1) * VEC_SIZE), pca: pca.slice(i * 3, (i + 1) * 3)};
+      dict[vocab[i]] = vectors.slice(i * VEC_SIZE, (i + 1) * VEC_SIZE);
     }
     return dict;
   }
@@ -120,7 +108,8 @@ async function loadVectorData(vectorType) {
   const reader = response.body.getReader();
   let bytesRead = 0;
   let vectsRead = 0;
-  const vectorData = new Uint8Array(nVectors * VEC_SIZE_BYTES);
+  const dict = {};
+  const buf = new Uint8Array(nVectors * VEC_SIZE_BYTES);
 
   while(true) {
     const {done, value} = await reader.read();
@@ -128,47 +117,28 @@ async function loadVectorData(vectorType) {
       break;
     }
 
-    vectorData.set(value, bytesRead);
+    buf.set(value, bytesRead);
     bytesRead += value.length;
-    document.getElementById('loading-w2v').value = (bytesRead) / vectorData.length;
+    document.getElementById('loading-w2v').value = (bytesRead) / buf.length;
   }
-
-  if(vectorType == 'glove-en') {
-    response = await fetch('https://www.googleapis.com/drive/v3/files/1jZ7uQr7WGl-BKHMQYcInCeRzZh2bRg5e?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
-  } else if(vectorType == 'word2vec-en') {
-    response = await fetch('https://www.googleapis.com/drive/v3/files/1jZ7uQr7WGl-BKHMQYcInCeRzZh2bRg5e?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
-  } else if(vectorType == 'word2vec-fi') {
-    response = await fetch('https://www.googleapis.com/drive/v3/files/1jZ7uQr7WGl-BKHMQYcInCeRzZh2bRg5e?alt=media&key=AIzaSyDaUUCy1-EwjzZZ95H1vZCww1V02X7d-kM');
-  } else {
-    throw 'Unknown vector type: ' + vectorType; 
-  }
-  const pcaData = await response.blob();
 
   console.log('Storing vectors in local database')
   await new Promise(resolve => {
     const trans = db.transaction(vectorType, 'readwrite');
     trans.oncomplete = resolve;
     const store = trans.objectStore(vectorType);
+    store.put({key: 'vectors', blob: buf});
+  });
+  await new Promise(resolve => {
+    const trans = db.transaction(vectorType, 'readwrite');
+    trans.oncomplete = resolve;
+    const store = trans.objectStore(vectorType);
     store.put({key: 'vocab', text: text});
   });
-  await new Promise(resolve => {
-    const trans = db.transaction(vectorType, 'readwrite');
-    trans.oncomplete = resolve;
-    const store = trans.objectStore(vectorType);
-    store.put({key: 'vectors', blob: vectorData});
-  });
-  await new Promise(resolve => {
-    const trans = db.transaction(vectorType, 'readwrite');
-    trans.oncomplete = resolve;
-    const store = trans.objectStore(vectorType);
-    store.put({key: 'pca', blob: pcaData});
-  });
 
-  const dict = {};
-  vectors = new Float32Array(await blobToArrayBuffer(new Blob([vectorData.buffer], {type: 'application/octet-stream'})));
-  pca = new Float32Array(await blobToArrayBuffer(pcaData, {type: 'application/octet-stream'}));
+  vectors = new Float32Array(await blobToArrayBuffer(new Blob([buf.buffer], {type: 'application/octet-stream'})));
   for(let i=0; i<nVectors; i++) {
-    dict[vocab[i]] = {vector: vectors.slice(i * VEC_SIZE, (i + 1) * VEC_SIZE), pca: pca.slice(i * 3, (i + 1) * 3)};
+    dict[vocab[i]] = vectors.slice(i * VEC_SIZE, (i + 1) * VEC_SIZE);
   }
 
   return dict;
@@ -209,7 +179,7 @@ function getClosestWords(form) {
     }
 
     try {
-      let vector = vectors[words[i]].vector;
+      let vector = vectors[words[i]];
       for(let j=0; j<vector.length; j++) {
         vectorRef[j] += sign * vector[j];
       }
@@ -231,8 +201,8 @@ function getClosestWords(form) {
       continue;
     }
     dist = 0;
-    for(let i=0; i<vector.vector.length; i++) {
-      diff = vectorRef[i] - vector.vector[i];
+    for(let i=0; i<vector.length; i++) {
+      diff = vectorRef[i] - vector[i];
       dist += diff * diff;
     }
     if(top_10.length < top_k || dist < top_10[9].dist) {
@@ -305,7 +275,7 @@ function getComparison(form) {
   let posVec = undefined;
   for(i=0; i<Math.min(neg.length, pos.length); i++) {
     try {
-      negVec = vectors[neg[i]].vector;
+      negVec = vectors[neg[i]];
       if(negVec == undefined) {
         notFound(neg[i]);
         return false;
@@ -315,7 +285,7 @@ function getComparison(form) {
       return false;
     }
     try {
-      posVec = vectors[pos[i]].vector;
+      posVec = vectors[pos[i]];
       if(posVec == undefined) {
         notFound(pos[i]);
         return false;
@@ -329,15 +299,10 @@ function getComparison(form) {
   vec = normVector(vec);
 
   const words = form.words.value.split(/[\s,]/).filter(w => w.length > 0);
-  let wordVecs = []
-  let pcaVecs = []
   let scores = {};
   for(i=0; i<words.length; i++) {
     try {
-      wordVec = vectors[words[i]].vector;
-      scores[words[i]] = projVector(wordVec, vec);
-      wordVecs.push(wordVec);
-      pcaVecs.push(vectors[words[i]].pca);
+      scores[words[i]] = projVector(vectors[words[i]], vec);
     } catch(err) {
       notFound(words[i]);
       return false;
@@ -355,80 +320,5 @@ function getComparison(form) {
   }
   html += '</table>';
   document.getElementById('result').innerHTML = html;
-
-  drawComparison(pcaVecs, words);
   return false;
-}
-
-function drawComparison(vectors, labels) {
-  let origin = [480, 300];
-
-  let rotationX = Math.PI / 6;
-  let rotationY = Math.PI / 5;
-  let scale = 50;
-
-  var point3d = d3._3d()
-    .x(d => d.x)
-    .y(d => d.y)
-    .z(d => d.z)
-    .origin(origin)
-    .rotateX(rotationX)
-    .rotateY(rotationY)
-    .scale(scale);
-
-  var axis = d3._3d()
-    .shape('LINE')
-    .origin(origin)
-    .rotateX(rotationX)
-    .rotateY(rotationY)
-    .scale(scale);
-
-  const j = 5;
-  const axes = [
-    [[0, 0, 0], [2 * j, 0, 0]],
-    [[0, 0, 0], [0, -2 * j, 0]],
-    [[0, 0, 0], [0, 0, -2 * j]]
-  ];
-
-  let svg = d3.select('svg');
-  //const scatter = vectors.map(v => {x: v[0]; y: v[1]; z: v[2]});
-  const scatter = vectors.map(function(v) {
-    return {x: v[0], y: v[1], z: v[2]};
-  });
-  console.log(scatter);
-
-  let points = svg.selectAll('circle').data(point3d(scatter), d => d.id);
-  let groups = points.enter().append('g');
-  points.exit().remove();
-
-  groups.append('circle')
-    .attr('class', 'marker')
-    .attr('opacity', 0)
-    .attr('cx', d => d.projected.x)
-    .attr('cy', d => d.projected.y)
-    .attr('r', 3)
-    .attr('fill', '#000000')
-    .attr('opacity', 1)
-    .attr('cx', d => d.projected.x)
-    .attr('cy', d => d.projected.y);
-
-  groups.append('text')
-    .attr('class', 'label')
-    .attr('x', d => d.projected.x + 5)
-    .attr('y', d => d.projected.y)
-    .attr('fill', '#000000')
-    .text((d, i) => labels[i]);
-
-  let lines = svg.selectAll('path.axis').data(axis(axes));
-  lines
-    .enter()
-    .append('line')
-    .attr('class', 'axis')
-    .attr('stroke', 'black')
-    .attr('stroke-width', .5)
-    .attr('x1', d => d[0].projected.x)
-    .attr('y1', d => d[0].projected.y)
-    .attr('x2', d => d[1].projected.x)
-    .attr('y2', d => d[1].projected.y);
-  lines.exit().remove();
 }
