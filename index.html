@@ -18,11 +18,9 @@
       <a href="https://www.aalto.fi/en/department-of-neuroscience-and-biomedical-engineering"><img src="images/logo_nbe.svg" alt="Department of Neuroimaging and Biomedical Engineering"/></a>
     </div>
     <h1>
-      <span class="lab">Aalto University's laboratory for</span>
-      <span class="cap">C</span>omputational
-      <span class="cap">M</span>odeling of
-      <span class="cap">H</span>uman
-      <span class="cap">C</span>ognition
+      <span class="cap">N</span>euro-<span class="cap">C</span>omputational
+      <span class="cap">I</span>nformation
+      <span class="cap">P</span>rocessing
     </h1>
 
     <nav>
@@ -39,20 +37,12 @@
 
     <section>
     <h2 id="mission"><span class="cap">M</span>ission</h2>
-    <p>It is our mission to understand the complex cognitive processes of the brain through computational models.</p>
-
-    <p>
-      When it comes to the brain, a lot of effort has gone into measuring and visualizing the brain activity produced by volunteers in the scanner.
-      However, we believe that when it comes to understanding the brain, data alone is not enough.
-      If brain activity is an indication of the brain at work, what is the work that the brain is actually doing?
-      What computational processes are we observing?
-      To answer this, we are building computational models that mimic the high-level processes in the brain closely enough, that we can compare the model to the brain activity we observe.
+    <p>It is our mission to understand how the brain processes information: how information enters it, how low-level information gets processed into higher-level information, how it integrates with other information, and how decisions are made based on it.
     </p>
-
     <p>
       Aalto University is famous for its pioneering work in brain imaging methods development.
       It is one of the birthplaces of MEG and is now performing ground breaking work in optically pumped magnetometer (OPM) sensor technology to drive the possibilities even further.
-      This lab aims to provide a strong computational modeling counterpart to the imaging work.
+      This group combines experimental work using these imaging methods with advanced data analysis and formal computational modeling to piece together the various information streams throughout the brain.
     </p>
     </section>
 
@@ -103,7 +93,7 @@
             <img src="images/marijn.jpg">
         </div>
         <p>
-          Constructing computational models of visual word recognition.
+          Linking neuro-computational processing streams to neuroimaging data.
         </p>
       </div>
     </section>
@@ -175,8 +165,8 @@
         <h3><a href="http://users.aalto.fi/~vanvlm1/mne-rsa">MNE-RSA</a></h3>
         <h4>Representational similarity analysis for MNE-Python</h4>
         <div class="links">
-          <a href="http://users.aalto.fi/~vanvlm1/mne-rsa">website</a>
-          <a href="https://github.com/wmvanvliet/mne-rsa">github</a>
+          <a href="https://mne.tools/mne-rsa">website</a>
+          <a href="https://github.com/mne-tools/mne-rsa">github</a>
         </div>
         <p>
           A plugin for <a href="https://mne.tools">MNE-Python</a> to perform representational similarity analysis (RSA) on EEG &amp; MEG data in a searchlight fashion.
@@ -194,10 +184,33 @@
           A PyTorch implementation of the HMAX model that closely follows that of the MATLAB implementation of The Laboratory for Computational Cognitive Neuroscience of Georgetown University.
         </p>
       </div>
-    </section>
+
+      <div class="package">
+        <h3><a href="https://github.com/wmvanvliet/posthoc">Post-Hoc</a></h3>
+        <h4>Inject domain information into your scikit-learn models</h4>
+        <div class="links">
+          <a href="https://aaltoimaginglanguage.github.io/posthoc/index.html">website</a>
+          <a href="https://github.com/wmvanvliet/posthoc">github</a>
+        </div>
+        <p>
+          Post-hoc modification of linear models is a way to decompose a linear scikit-learn model into three matrices: the pattern, the covariance, and the normalizer. These matrices can be modified at will to inject domain information and then re-assembled into a linear model.
+        </p>
+      </div>
+
+      <div class="package">
+        <h3><a href="https://github.com/wmvanvliet/torch-pcdim">Torch-PCDIM</a></h3>
+        <h4>The DIM predictive coding model implemented in PyTorch</h4>
+        <div class="links">
+          <a href="https://github.com/wmvanvliet/torch-pcdim">github</a>
+        </div>
+        <p>
+        A PyTorch implementation of DIM-stype predictive coding where each layer is predicting the preceding layer while propagating prediction error forwards. It can be used to simulate evoked responses. Includes an implementation of <a href="https://doi.org/10.1016/j.cognition.2024.105755">Nour Eddine et al. (2024)</a>.
+        </p>
+      </div>
 
     <section>
       <h2 id="talks"><span class="cap kern">T</span>alks &amp; <span class="cap">L</span>ectures</h2>
+      <a class="talk" href="https://youtu.be/19cNdk6pjrw"><img src="images/talk6.jpg"></a>
       <a class="talk" href="https://youtu.be/kLeRrNT26qc"><img src="images/talk5.jpg"></a>
       <a class="talk" href="https://youtu.be/Cqbjz6eHTLc"><img src="images/talk1.jpg"></a>
       <a class="talk" href="https://youtu.be/2y68NMmacG4"><img src="images/talk2.jpg"></a>
